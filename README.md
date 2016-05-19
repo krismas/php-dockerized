@@ -1,6 +1,6 @@
 # PHP Dockerized
 
-> Dockerized PHP development stack: Nginx, MySQL, MongoDB, PHP-FPM, HHVM, Memcached, Redis, and Elasticsearch
+> Dockerized PHP development stack: Nginx, MariaDB, MongoDB, PHP-FPM, HHVM, Memcached, Redis, Elasticsearch and RabbitMQ
 
 [![Build Status](https://travis-ci.org/kasperisager/php-dockerized.svg)](https://travis-ci.org/kasperisager/php-dockerized)
 
@@ -9,13 +9,15 @@ PHP Dockerized gives you everything you need for developing PHP applications loc
 ## What's inside
 
 * [Nginx](http://nginx.org/)
-* [MySQL](http://www.mysql.com/)
+* [MariaDB](https://github.com/MariaDB/server/)
 * [MongoDB](http://www.mongodb.org/)
 * [PHP-FPM](http://php-fpm.org/)
 * [HHVM](http://www.hhvm.com/)
 * [Memcached](http://memcached.org/)
+* [Composer](https://github.com/composer/composer/)
 * [Redis](http://redis.io/)
 * [Elasticsearch](http://www.elasticsearch.org/)
+* [RabbitMQ](https://www.rabbitmq.com/)
 
 ## Requirements
 
@@ -32,6 +34,36 @@ $ docker-compose up
 ```
 
 That's it! You can now access your configured sites via the IP address of the Docker Machine or locally if you're running a Linux flavour and using Docker natively.
+
+## Composer
+
+You can add an optional composer command to the host (cf. https://hub.docker.com/r/composer/composer) : 
+
+Create new composer file
+
+```sh
+$ sudo vim /usr/local/bin/composer
+```
+
+The contents of the file will look like this:
+
+```sh
+#!/bin/sh
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+echo "Current working directory: '"$(pwd)"'"
+docker run --rm -v $(pwd):/app -v ~/.ssh:/root/.ssh composer/composer $@
+```
+
+Once the script has been made, it must be set as executable
+
+```sh
+$ sudo chmod +x /usr/local/bin/composer
+```
+Now the composer command is available native on host:
+
+```sh
+$ composer --version
+```
 
 ## License
 
